@@ -5,7 +5,7 @@
 </style></head><body>
 <header><div class="wrap"><h1>Simulador Matemático</h1><div>10.º EGB · Segundo Trimestre · Unidad Educativa Jerusalén</div></div></header>
 <main class="wrap">
-<section id="start" class="card"><h2>Comenzar evaluación</h2><div class="hint"><b>25 preguntas por intento.</b> Se seleccionan aleatoriamente del banco de 50. Al finalizar se muestra la nota sobre 10 y, para cada error, la respuesta correcta y el procedimiento.</div><div class="grid" style="margin-top:15px"><div><label>Nombre del estudiante<input id="name" type="text" placeholder="Nombre completo"></label></div><div><label>Curso<select><option>10.º EGB</option></select></label></div></div><p class="small">Funciona directamente en el navegador y no requiere instalación.</p><button class="primary" onclick="start()">Iniciar simulador</button></section>
+<section id="start" class="card"><h2>Comenzar evaluación</h2><div class="hint"><b>25 preguntas por intento.</b> Se seleccionan aleatoriamente del banco de 100. Al finalizar se muestra la nota sobre 10 y, para cada error, la respuesta correcta y el procedimiento.</div><div class="grid" style="margin-top:15px"><div><label>Nombre del estudiante<input id="name" type="text" placeholder="Nombre completo"></label></div><div><label>Curso<select><option>10.º EGB</option></select></label></div></div><p class="small">Funciona directamente en el navegador y no requiere instalación.</p><button class="primary" onclick="start()">Iniciar simulador</button></section>
 <section id="quiz" class="hidden"><div class="card"><div class="meta"><span id="who"></span><span id="num"></span></div><div class="progress-wrap"><div id="bar" class="progress"></div></div><div id="qa"></div><div class="actions"><button id="prev" class="secondary" onclick="move(-1)">Anterior</button><button id="next" class="primary" onclick="move(1)">Siguiente</button><button id="finish" class="primary hidden" onclick="finish()">Finalizar evaluación</button></div></div></section>
 <section id="result" class="hidden"><div class="card"><h2>Resultado</h2><p id="rwho"></p><div id="score" class="score"></div><div class="stats"><div class="stat"><b id="ok">0</b>Correctas</div><div class="stat"><b id="bad">0</b>Incorrectas</div><div class="stat"><b id="pct">0%</b>Porcentaje</div></div><div class="actions"><button class="primary" onclick="again()">Nuevo intento</button></div></div><div id="review"></div></section>
 </main>
@@ -61,6 +61,57 @@ const B=[
 {id:48,t:'mcq',topic:'Segundo grado',q:'Resuelve por factorización: x²−9x+20=0.',o:['x=2 y x=10','x=4 y x=5','x=−4 y x=−5','x=1 y x=20'],a:1,p:'(x−4)(x−5)=0. Soluciones x=4 y x=5.'},
 {id:49,t:'mcq',topic:'Inecuaciones',q:'Resuelve: (2x+1)/5<3.',o:['x<7','x>7','x≤7','x≥7'],a:0,p:'2x+1<15→2x<14→x<7.'},
 {id:50,t:'mcq',topic:'Ecuaciones',q:'Resuelve: (x−1)/2+(x+3)/4=5.',o:['x=5','x=6','x=7','x=8','x=19/3'],a:4,p:'Multiplique por 4: 2(x−1)+(x+3)=20. Entonces 2x−2+x+3=20; 3x+1=20; 3x=19; x=19/3. El banco fuente no incluía esta alternativa correcta, por lo que se añadió para que la pregunta pueda evaluarse.'}
+
+,{id:51,t:'mcq',topic:'Polinomios',q:'Simplifique: (6x²+3x−5)−(2x²−4x+1).',o:['4x²+7x−6','8x²−x−4','4x²−x−6','4x²+7x+6'],a:0,p:'Distribuya el signo menos y reduzca términos semejantes: 4x²+7x−6.'},
+{id:52,t:'mcq',topic:'Multiplicación',q:'Desarrolle: (3x−2)(x+4).',o:['3x²+10x−8','3x²+12x−8','3x²−10x−8','3x²+2x−8'],a:0,p:'3x²+12x−2x−8=3x²+10x−8.'},
+{id:53,t:'mcq',topic:'Polinomios',q:'Simplifique: (2x³+x²−4x+6)+(x³−3x²+2x−1).',o:['3x³−2x²−2x+5','3x³+4x²−2x+7','x³−2x²−2x+5','3x³−2x²+2x+5'],a:0,p:'Combine términos semejantes: 3x³−2x²−2x+5.'},
+{id:54,t:'mcq',topic:'Multiplicación',q:'Desarrolle: (x+3)(x−5).',o:['x²−2x−15','x²+2x−15','x²−8x+15','x²−15'],a:0,p:'x²−5x+3x−15=x²−2x−15.'},
+{id:55,t:'mcq',topic:'Ecuaciones',q:'Resuelva: 4x+7=31.',o:['x=5','x=6','x=7','x=8'],a:1,p:'4x=24; x=6.'},
+{id:56,t:'mcq',topic:'Ecuaciones',q:'Resuelva: 7x−9=3x+15.',o:['x=4','x=5','x=6','x=7'],a:2,p:'4x=24; x=6.'},
+{id:57,t:'mcq',topic:'Ecuaciones',q:'Resuelva: 2(x+3)=18.',o:['x=5','x=6','x=7','x=9'],a:1,p:'x+3=9; x=6.'},
+{id:58,t:'mcq',topic:'Ecuaciones',q:'Resuelva: (x+4)/3=5.',o:['x=11','x=12','x=13','x=15'],a:0,p:'x+4=15; x=11.'},
+{id:59,t:'mcq',topic:'Ecuaciones',q:'Resuelva: 5(x−1)=2x+9.',o:['x=4','x=14/3','x=14/5','x=3'],a:1,p:'5x−5=2x+9; 3x=14; x=14/3.'},
+{id:60,t:'mcq',topic:'Despeje',q:'Despeje t en v=d/t.',o:['t=v/d','t=d/v','t=dv','t=v−d'],a:1,p:'vt=d; divida para v: t=d/v.'},
+{id:61,t:'mcq',topic:'Despeje',q:'Despeje b en P=2b+2h.',o:['b=P/2−h','b=P−2h','b=2P−h','b=P/2+h'],a:0,p:'P/2=b+h; b=P/2−h.'},
+{id:62,t:'mcq',topic:'Despeje',q:'Despeje m en F=ma.',o:['m=F/a','m=a/F','m=F−a','m=Fa'],a:0,p:'Divida F=ma entre a: m=F/a.'},
+{id:63,t:'mcq',topic:'Despeje',q:'Despeje d en v=d/t.',o:['d=v/t','d=vt','d=t/v','d=v+t'],a:1,p:'Multiplique ambos miembros por t: d=vt.'},
+{id:64,t:'mcq',topic:'Intervalos',q:'¿Cuál es la notación de x≥3?',o:['(3,∞)','[3,∞)','(−∞,3]','[3,∞]'],a:1,p:'3 está incluido, por eso se usa corchete. El infinito siempre usa paréntesis.'},
+{id:65,t:'mcq',topic:'Intervalos',q:'¿Cuál es la notación de −2<x≤5?',o:['[−2,5]','(−2,5]','[−2,5)','(−2,5)'],a:1,p:'−2 se excluye y 5 se incluye: (−2,5].'},
+{id:66,t:'mcq',topic:'Intervalos',q:'Si A=(1,6] y B=[4,9), determine A∩B.',o:['(1,9)','[4,6]','(4,6)','[1,9)'],a:1,p:'Los elementos comunes son desde 4 hasta 6, ambos incluidos: [4,6].'},
+{id:67,t:'mcq',topic:'Intervalos',q:'Si A=(−3,2] y B=(1,5), determine A∪B.',o:['(−3,5)','[−3,5]','(1,2]','(−3,2]'],a:0,p:'Los intervalos se superponen; la unión es (−3,5).'},
+{id:68,t:'mcq',topic:'Intervalos',q:'Si A=[−4,3) y B=[1,6), determine A\B.',o:['[−4,1)','[1,3)','(−4,1)','[−4,3)'],a:0,p:'Al quitar de A los elementos de B queda [−4,1).'},
+{id:69,t:'mcq',topic:'Segundo grado',q:'Resuelva x²−16=0.',o:['x=4','x=−4','x=±4','x=16'],a:2,p:'x²=16; por raíz cuadrada x=4 o x=−4.'},
+{id:70,t:'mcq',topic:'Segundo grado',q:'Resuelva x²−7x+12=0.',o:['x=2 y x=6','x=3 y x=4','x=−3 y x=−4','x=1 y x=12'],a:1,p:'(x−3)(x−4)=0; x=3,4.'},
+{id:71,t:'mcq',topic:'Segundo grado',q:'Resuelva 2x²−8x=0.',o:['x=0 y x=4','x=2 y x=4','x=−4 y x=0','x=4 solamente'],a:0,p:'2x(x−4)=0; x=0 o x=4.'},
+{id:72,t:'mcq',topic:'Segundo grado',q:'En 3x²−5x−2=0, ¿cuáles son a, b y c?',o:['a=3,b=5,c=−2','a=3,b=−5,c=−2','a=−3,b=5,c=2','a=3,b=−2,c=−5'],a:1,p:'Comparando con ax²+bx+c=0: a=3,b=−5,c=−2.'},
+{id:73,t:'mcq',topic:'Segundo grado',q:'¿Cuál es el discriminante de x²−6x+5=0?',o:['4','16','36','56'],a:1,p:'Δ=(−6)²−4(1)(5)=36−20=16.'},
+{id:74,t:'mcq',topic:'Segundo grado',q:'Resuelva x²+2x−8=0.',o:['x=2 y x=−4','x=4 y x=−2','x=2 y x=4','x=−2 y x=−4'],a:0,p:'(x+4)(x−2)=0; x=−4,2.'},
+{id:75,t:'mcq',topic:'Inecuaciones',q:'Resuelva 3x−5>10.',o:['x>3','x>5','x<5','x≥5'],a:1,p:'3x>15; x>5.'},
+{id:76,t:'mcq',topic:'Inecuaciones',q:'Resuelva 2x+1≤9.',o:['x≤4','x≥4','x<5','x≤5'],a:0,p:'2x≤8; x≤4.'},
+{id:77,t:'mcq',topic:'Inecuaciones',q:'Resuelva (x−1)/2<4.',o:['x<9','x>7','x≤9','x<8'],a:0,p:'x−1<8; x<9.'},
+{id:78,t:'mcq',topic:'Inecuaciones',q:'¿Cuál es la solución de −2x>8?',o:['x>−4','x<−4','x>4','x<4'],a:1,p:'Al dividir por −2 se invierte el signo: x<−4.'},
+{id:79,t:'mcq',topic:'Inecuaciones',q:'Resuelva (x+2)/3≥5.',o:['x≥13','x≤13','x>15','x≥15'],a:0,p:'x+2≥15; x≥13.'},
+{id:80,t:'vf',topic:'Inecuaciones',q:'Al multiplicar o dividir una inecuación por un número negativo, el signo se invierte.',a:true,p:'Es una regla fundamental de las inecuaciones.'},
+{id:81,t:'vf',topic:'Intervalos',q:'El intervalo [2,5) incluye al 2 y excluye al 5.',a:true,p:'Corchete significa inclusión y paréntesis exclusión.'},
+{id:82,t:'vf',topic:'Ecuaciones',q:'La ecuación x²−9=0 es de primer grado.',a:false,p:'Es de segundo grado porque la mayor potencia de x es 2.'},
+{id:83,t:'vf',topic:'Polinomios',q:'Para sumar polinomios se reducen términos semejantes.',a:true,p:'Se combinan términos con igual parte literal y exponentes.'},
+{id:84,t:'vf',topic:'Despeje',q:'De A=bh/2 se obtiene b=2A/h.',a:true,p:'2A=bh y, al dividir para h, b=2A/h.'},
+{id:85,t:'order',topic:'Ecuaciones',q:'Ordene los pasos para resolver 3x−4=11.',i:['Sumar 4 a ambos miembros.','Obtener 3x=15.','Dividir entre 3.','Obtener x=5.'],a:['1','2','3','4'],p:'Se suma 4, se obtiene 3x=15, se divide entre 3 y se concluye x=5.'},
+{id:86,t:'order',topic:'Inecuaciones',q:'Ordene los pasos para resolver 2x+3≥11.',i:['Restar 3.','Obtener 2x≥8.','Dividir entre 2.','Obtener x≥4.'],a:['1','2','3','4'],p:'Reste 3, divida entre 2 y obtenga x≥4.'},
+{id:87,t:'order',topic:'Segundo grado',q:'Ordene los pasos para resolver x²−5x+6=0 por factorización.',i:['Buscar dos números cuyo producto sea 6 y suma −5.','Escribir (x−2)(x−3)=0.','Igualar cada factor a cero.','Obtener x=2 y x=3.'],a:['1','2','3','4'],p:'Se buscan los factores, se factoriza, se igualan a cero y se obtienen las soluciones.'},
+{id:88,t:'order',topic:'División',q:'Ordene el procedimiento básico de división de polinomios.',i:['Ordenar los polinomios por grado.','Dividir los primeros términos.','Multiplicar el divisor por el término del cociente.','Restar y continuar.'],a:['1','2','3','4'],p:'Primero se ordena; luego se divide, multiplica y resta sucesivamente.'},
+{id:89,t:'multi',topic:'Ecuaciones',q:'Seleccione las ecuaciones de primer grado.',i:['4x+1=9','x²−1=0','7−2x=3','3/x=2','5(x−1)=10'],a:[0,2,4],p:'Son de primer grado 1, 3 y 5.'},
+{id:90,t:'multi',topic:'Segundo grado',q:'Seleccione las ecuaciones cuadráticas incompletas.',i:['x²−16=0','2x²+6x=0','x²+4x+4=0','5x²−20=0','x²−3x+2=0'],a:[0,1,3],p:'Son incompletas 1, 2 y 4.'},
+{id:91,t:'multi',topic:'Intervalos',q:'Sean A=[−2,4) y B=(1,6]. Seleccione las afirmaciones correctas.',i:['A∩B=(1,4)','A∪B=[−2,6]','2∈A∩B','6∈A∪B'],a:[0,1,2,3],p:'La intersección es (1,4), la unión [−2,6], 2 pertenece a la intersección y 6 a la unión.'},
+{id:92,t:'multi',topic:'Despeje',q:'Seleccione los despejes correctos.',i:['v=d/t → d=vt','F=ma → a=F/m','A=bh/2 → h=2A/b','P=2(l+w) → w=P−2l'],a:[0,1,2],p:'Los tres primeros son correctos; el último debe ser w=P/2−l.'},
+{id:93,t:'rel',topic:'Ecuaciones',q:'Relacione cada ecuación con su solución.',l:['1. x+5=12','2. 2x=18','3. 3x−6=9','4. 5x+10=0'],r:['a. x=−2','b. x=7','c. x=9','d. x=5'],a:['b','c','d','a'],p:'Las soluciones son 7, 9, 5 y −2 respectivamente.'},
+{id:94,t:'rel',topic:'Intervalos',q:'Relacione cada desigualdad con su intervalo.',l:['1. x>2','2. x≤−1','3. x≥4','4. −2<x<3'],r:['a. [4,∞)','b. (2,∞)','c. (−∞,−1]','d. (−2,3)'],a:['b','c','a','d'],p:'Se traduce cada desigualdad considerando inclusión o exclusión de los extremos.'},
+{id:95,t:'rel',topic:'Despeje',q:'Relacione cada fórmula con su despeje.',l:['1. F=ma','2. v=d/t','3. A=bh/2','4. P=2(l+w)'],r:['a. t=d/v','b. h=2A/b','c. m=F/a','d. w=P/2−l'],a:['c','a','b','d'],p:'Los despejes son m=F/a, t=d/v, h=2A/b y w=P/2−l.'},
+{id:96,t:'mcq',topic:'Fracciones algebraicas',q:'Simplifique: 1/(2x)+3/(4x).',o:['5/(4x)','4/(5x)','1/(4x)','3/(2x)'],a:0,p:'1/(2x)=2/(4x); entonces 2/(4x)+3/(4x)=5/(4x).'},
+{id:97,t:'mcq',topic:'Fracciones algebraicas',q:'¿Qué valores deben excluirse en 5/[x(x−2)]?',o:['x≠5','x≠0 y x≠2','x≠−2','ninguno'],a:1,p:'El denominador no puede ser cero: x≠0 y x≠2.'},
+{id:98,t:'mcq',topic:'MCM',q:'¿Cuál es el MCM de 6x(x+1) y 15x²(x+1)?',o:['30x²(x+1)','90x²(x+1)','30x(x+1)²','15x²(x+1)²'],a:0,p:'m.c.m.(6,15)=30 y la mayor potencia de x es x².'},
+{id:99,t:'mcq',topic:'División',q:'¿Cuál es el cociente de (x²−9)÷(x−3)?',o:['x−3','x+3','x²+3','x+9'],a:1,p:'x²−9=(x−3)(x+3); el cociente es x+3.'},
+{id:100,t:'mcq',topic:'Ecuaciones',q:'Resuelva: 3(x+2)−4=2x+7.',o:['x=3','x=4','x=5','x=7'],a:2,p:'3x+2=2x+7; por tanto x=5.'}
 ];
 let attempt=[],pos=0,ans={},student='';
 const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
